@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Il mio consulente</title>
+<style>
+:root{--bg:#f4f5f8;--card:#fff;--ink:#1a1f36;--mute:#646b85;--line:#e2e5ee;--hero:#2a2a72;--heroInk:#fff;--gold:#f2c14e;--acc:#3b4fd8;--ok:#1b8a5a;--bad:#c9472b;--c1:#8f98b5;--c2:#3b4fd8;--c3:#1b8a5a;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0e1020;--card:#171a31;--ink:#eceef9;--mute:#9aa1c0;--line:#272b4a;--hero:#34348c;--acc:#8c9bff;--ok:#4cc790;--bad:#ff8a6b;--c1:#7a83a6;--c2:#8c9bff;--c3:#4cc790;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0e1020;--card:#171a31;--ink:#eceef9;--mute:#9aa1c0;--line:#272b4a;--hero:#34348c;--acc:#8c9bff;--ok:#4cc790;--bad:#ff8a6b;--c1:#7a83a6;--c2:#8c9bff;--c3:#4cc790;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 "Avenir Next","Segoe UI",system-ui,sans-serif}
+main{max-width:600px;margin:0 auto;padding:16px 16px 96px}
+h1{font:700 26px/1.15 "Iowan Old Style",Georgia,serif;margin:6px 0 14px}
+h2{font:700 18px/1.2 "Iowan Old Style",Georgia,serif;margin:0 0 12px}
+.tab{display:none}.tab.on{display:block}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px;margin-bottom:14px}
+.hero{background:var(--hero);color:var(--heroInk);border:0;display:flex;align-items:center;gap:16px}
+.hero .big{font:700 34px/1 "Iowan Old Style",Georgia,serif}
+.hero small{opacity:.8;display:block;font-size:13px}
+.hero svg{width:120px;height:120px;flex:none}
+.mini{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}
+.mini div{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:10px;font-size:13px;color:var(--mute)}
+.mini b{display:block;color:var(--ink);font-size:17px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+label{display:block;font-size:13px;color:var(--mute)}
+input,select{width:100%;margin-top:3px;padding:10px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);font:inherit}
+input:focus-visible,select:focus-visible,button:focus-visible{outline:2px solid var(--acc);outline-offset:1px}
+button.p{background:var(--acc);color:#fff;border:0;border-radius:10px;padding:11px 16px;font:600 15px inherit;cursor:pointer;margin-top:10px;width:100%}
+button.x{background:none;border:0;color:var(--mute);font-size:18px;cursor:pointer;padding:4px 8px}
+.tip{border-left:4px solid var(--acc);padding:2px 0 2px 12px;margin-bottom:14px}
+.tip.ok{border-color:var(--ok)}.tip.bad{border-color:var(--bad)}
+.tip b{display:block}.tip span{color:var(--mute);font-size:15px}
+.row{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:9px 0;border-top:1px solid var(--line)}
+.row:first-child{border-top:0}
+.row small{color:var(--mute);display:block}
+.bar{height:10px;border-radius:5px;background:var(--line);overflow:hidden;margin:6px 0}
+.bar i{display:block;height:100%;background:var(--acc)}
+.bar.g i{background:var(--ok)}
+.leg{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:13px;color:var(--mute)}
+.leg b{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px}
+.prof{font:700 26px/1.1 "Iowan Old Style",Georgia,serif;color:var(--acc)}
+svg.ch{width:100%;height:auto;display:block;margin-top:8px}
+.note{font-size:12.5px;color:var(--mute);margin-top:12px}
+nav{position:fixed;left:0;right:0;bottom:0;display:flex;background:var(--card);border-top:1px solid var(--line);padding:6px 4px calc(6px + env(safe-area-inset-bottom,0px))}
+nav button{flex:1;background:none;border:0;color:var(--mute);font:600 12px inherit;padding:6px 2px;cursor:pointer}
+nav button span{display:block;font-size:20px;line-height:1.2}
+nav button.on{color:var(--acc)}
+</style>
+</head>
+<body>
+<main>
+<div class="tab on" id="t-home">
+<h1>Il mio consulente</h1>
+<div class="card hero"><svg viewBox="0 0 120 120" id="ring"></svg><div><small>Ti restano per il mese</small><div class="big" id="hLeft"></div><small id="hSub"></small></div></div>
+<div class="mini" id="mini"></div>
+<div class="card"><h2>Consigli per te</h2><div id="tips"></div></div>
+</div>
+
+<div class="tab" id="t-exp">
+<h1>Spese</h1>
+<div class="card"><div class="grid"><label>Importo (€)<input id="xa" type="number" inputmode="decimal"></label><label>Categoria<select id="xc"></select></label></div><label style="margin-top:10px">Nota (facoltativa)<input id="xn" type="text"></label><button class="p" id="xadd">Aggiungi spesa</button></div>
+<div class="card"><h2>Questo mese</h2><div id="xcat"></div></div>
+<div class="card"><h2>Ultime spese</h2><div id="xlist"></div></div>
+</div>
+
+<div class="tab" id="t-goal">
+<h1>Obiettivi</h1>
+<div class="card" id="goals"></div>
+<div class="card"><h2>Nuovo obiettivo</h2><div class="grid"><label>Nome<input id="gn" type="text" placeholder="Vacanza, auto…"></label><label>Importo (€)<input id="gt" type="number" inputmode="decimal"></label><label>Già messi (€)<input id="gs" type="number" inputmode="decimal"></label><label>Entro il mese di<input id="gd" type="month"></label></div><button class="p" id="gadd">Aggiungi obiettivo</button></div>
+</div>
+
+<div class="tab" id="t-inv">
+<h1>Investire</h1>
+<div class="card"><h2>Il tuo profilo</h2><div class="prof" id="prof"></div><div class="bar" style="height:22px;display:flex" id="abar"></div><div class="leg" id="aleg"></div><p id="atxt" style="margin:10px 0 0"></p></div>
+<div class="card"><h2>Cosa guardare per scegliere</h2><div id="ideas"></div></div>
+<div class="card"><h2>Quanto potresti avere</h2><div class="leg" id="scleg"></div><svg class="ch" id="chart" viewBox="0 0 320 150" role="img" aria-label="Crescita in tre scenari"></svg><div id="scen" style="margin-top:10px"></div></div>
+<div class="card"><h2>Costi e tasse in Italia</h2>
+<div class="tip"><b>Imposta sul guadagno</b><span>26% sulla plusvalenza, solo quando vendi. Sui titoli di Stato è il 12,5%.</span></div>
+<div class="tip"><b>Bollo</b><span>0,2% all’anno sul valore detenuto.</span></div>
+<div class="tip"><b>Broker</b><span>Un sostituto d’imposta calcola e versa le tasse per te. Controlla che il PAC sia gratuito proprio sull’ETF scelto.</span></div></div>
+<p class="note">Strumento educativo, non consulenza personalizzata: gli ETF sono esempi, non raccomandazioni. Scenari e rendimenti sono ipotesi e investire comporta il rischio di perdere parte del capitale. Per scelte importanti rivolgiti a un consulente indipendente.</p>
+</div>
+
+<div class="tab" id="t-prof">
+<h1>Profilo</h1>
+<div class="card"><div class="grid">
+<label>Età<input data-k="age" type="number" inputmode="numeric"></label>
+<label>Stipendio netto (€)<input data-k="inc" type="number" inputmode="decimal"></label>
+<label>Rata della casa (€)<input data-k="rata" type="number" inputmode="decimal"></label>
+<label>Bollette e altre fisse (€)<input data-k="fix" type="number" inputmode="decimal"></label>
+<label>Spesa e vita quotidiana (€)<input data-k="day" type="number" inputmode="decimal"></label>
+<label>Svago e extra (€)<input data-k="fun" type="number" inputmode="decimal"></label>
+<label>Risparmio mensile (€)<input data-k="sav" type="number" inputmode="decimal"></label>
+<label>Già messi da parte (€)<input data-k="have" type="number" inputmode="decimal"></label>
+<label>Fondo di emergenza<select data-k="res"><option value="3">3 mesi di spese</option><option value="6">6 mesi di spese</option></select></label>
+<label>Anni di investimento<input data-k="yrs" type="number" inputmode="numeric"></label>
+</div>
+<label style="margin-top:10px">Se l’investimento scendesse del 20%, cosa faresti?<select data-k="rx"><option value="0">Venderei tutto</option><option value="1">Aspetterei</option><option value="2">Comprerei altro</option></select></label></div>
+<p class="note">I tuoi dati restano su questo dispositivo.</p>
+</div>
+</main>
+<nav id="nav"><button data-t="home" class="on"><span>🏠</span>Oggi</button><button data-t="exp"><span>🧾</span>Spese</button><button data-t="goal"><span>🎯</span>Obiettivi</button><button data-t="inv"><span>📈</span>Investire</button><button data-t="prof"><span>👤</span>Profilo</button></nav>
+<script>
+var D={age:30,inc:1500,rata:400,fix:200,day:500,fun:150,sav:200,have:0,res:3,yrs:10,rx:1,exp:[],goals:[]},S=Object.assign({},D);
+try{["cons1","cons2"].forEach(function(k){var r=localStorage.getItem(k);if(r)Object.assign(S,JSON.parse(r))})}catch(e){}
+var $=function(i){return document.getElementById(i)};
+var E=function(n){return Math.round(n).toLocaleString("it-IT",{style:"currency",currency:"EUR",maximumFractionDigits:0})};
+function save(){try{localStorage.setItem("cons2",JSON.stringify(S))}catch(e){}}
+var CAT=[["Spesa","e"],["Casa","e"],["Trasporti","e"],["Salute","e"],["Ristoranti","f"],["Svago","f"],["Altro","f"]];
+$("xc").innerHTML=CAT.map(function(c,i){return'<option value="'+i+'">'+c[0]+'</option>'}).join("");
+var now=new Date(),p2=function(n){return String(n).padStart(2,"0")};
+var ym=now.getFullYear()+"-"+p2(now.getMonth()+1),today=ym+"-"+p2(now.getDate()),dim=new Date(now.getFullYear(),now.getMonth()+1,0).getDate();
+document.querySelectorAll("[data-k]").forEach(function(el){
+  el.value=S[el.dataset.k];
+  el.addEventListener("input",function(){var v=parseFloat(el.value);S[el.dataset.k]=isNaN(v)||v<0?0:v;save();draw()});
+});
+$("nav").addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;
+  document.querySelectorAll(".tab").forEach(function(t){t.classList.toggle("on",t.id==="t-"+b.dataset.t)});
+  document.querySelectorAll("nav button").forEach(function(x){x.classList.toggle("on",x===b)});window.scrollTo(0,0)});
+$("xadd").onclick=function(){var a=parseFloat($("xa").value);if(!(a>0))return;
+  S.exp.push({a:a,c:+$("xc").value,n:$("xn").value.trim(),d:today});$("xa").value="";$("xn").value="";save();draw()};
+$("xlist").onclick=function(e){var b=e.target.closest("[data-del]");if(b){S.exp.splice(+b.dataset.del,1);save();draw()}};
+$("gadd").onclick=function(){var t=parseFloat($("gt").value),n=$("gn").value.trim(),d=$("gd").value;if(!(t>0)||!n||!d)return;
+  S.goals.push({n:n,t:t,s:parseFloat($("gs").value)||0,d:d});["gn","gt","gs","gd"].forEach(function(i){$(i).value=""});save();draw()};
+$("goals").onclick=function(e){var b=e.target.closest("[data-a]");if(!b)return;var i=+b.dataset.i;
+  if(b.dataset.a==="del")S.goals.splice(i,1);
+  else{var v=parseFloat(b.parentNode.querySelector("input").value);if(!(v>0))return;S.goals[i].s+=v}
+  save();draw()};
+function draw(){
+  var inc=S.inc,fixed=S.rata+S.fix,vb=S.day+S.fun,sav=S.sav,ess=fixed+S.day;
+  var me=[];S.exp.forEach(function(x,i){if(x.d.slice(0,7)===ym)me.push({x:x,i:i})});
+  var sp=me.reduce(function(s,o){return s+o.x.a},0),left=vb-sp,pct=vb>0?sp/vb:0;
+  var cat={};me.forEach(function(o){cat[o.x.c]=(cat[o.x.c]||0)+o.x.a});
+  var top=-1,tv=0;for(var k in cat)if(cat[k]>tv){tv=cat[k];top=+k}
+  var C=2*Math.PI*48,dash=C*Math.min(pct,1);
+  $("ring").innerHTML='<circle cx="60" cy="60" r="48" fill="none" stroke="rgba(255,255,255,.2)" stroke-width="12"/><circle cx="60" cy="60" r="48" fill="none" stroke="'+(pct>1?"#ff8a6b":"var(--gold)")+'" stroke-width="12" stroke-linecap="round" stroke-dasharray="'+dash+' '+C+'" transform="rotate(-90 60 60)"/><text x="60" y="66" text-anchor="middle" fill="#fff" font-size="20" font-weight="700">'+Math.round(pct*100)+'%</text>';
+  $("hLeft").textContent=E(left);
+  $("hSub").textContent="Speso "+E(sp)+" su "+E(vb)+" di budget variabile";
+  $("mini").innerHTML='<div><b>'+E(inc)+'</b>Entrate</div><div><b>'+E(fixed)+'</b>Rata e fisse</div><div><b>'+E(sav)+'</b>Da risparmiare</div>';
+  // consigli personali
+  var T=[],proj=sp/Math.max(now.getDate(),1)*dim,target=S.res*ess,gap=Math.max(0,target-S.have),m0=gap===0?0:sav>0?Math.ceil(gap/sav):Infinity,lump=Math.max(0,S.have-target);
+  if(!me.length)T.push(["","Registra le tue spese","Nella scheda Spese segna ciò che spendi: da lì i consigli si basano sui tuoi dati reali e non su stime."]);
+  else if(proj>vb*1.05)T.push(["bad","Rischi di sforare il budget","Al ritmo di questo mese chiuderai a circa "+E(proj)+" contro "+E(vb)+". La voce più pesante è "+CAT[top][0]+" ("+E(tv)+"): ridurla del 20% ti fa recuperare "+E(tv*.2)+"."]);
+  else T.push(["ok","Sei in linea","Al ritmo attuale chiuderai a circa "+E(proj)+": ti avanzano "+E(vb-proj)+" che puoi aggiungere al risparmio."]);
+  var fun=0;me.forEach(function(o){if(CAT[o.x.c][1]==="f")fun+=o.x.a});
+  if(sp>0&&fun/sp>.4)T.push(["","Lo svago pesa il "+Math.round(fun/sp*100)+"% delle spese","Tra ristoranti, svago e altro hai speso "+E(fun)+" su un budget extra di "+E(S.fun)+"."]);
+  var resto=inc-fixed-vb-sav;
+  T.push([resto>=0?"ok":"bad",resto>=0?"Il piano torna":"Il piano non torna",resto>=0?"Dopo fisse, budget variabile e "+E(sav)+" di risparmio ti restano "+E(resto)+" al mese.":"Mancano "+E(-resto)+" al mese: riduci il budget variabile o il risparmio."]);
+  T.push([gap===0?"ok":"","Fondo di emergenza",gap===0?"Hai "+E(S.have)+": copre "+(ess>0?(S.have/ess).toFixed(1):0)+" mesi di spese essenziali.":"Ti mancano "+E(gap)+" su "+E(target)+": con "+E(sav)+" al mese servono "+(m0===Infinity?"…":m0)+" mesi. Finché non è pronto, niente ETF."]);
+  var q=inc>0?S.rata/inc*100:0;
+  T.push([q>30?"bad":"ok","La rata vale il "+Math.round(q)+"% dello stipendio",q>35?"È alta: valuta di rinegoziare o surrogare il mutuo.":q>30?"È al limite: poco margine per gli imprevisti.":"È sotto il 30%, una soglia sana."]);
+  var tn=0;S.goals.forEach(function(g){var ml=Math.max(1,(+g.d.slice(0,4)-now.getFullYear())*12+(+g.d.slice(5)-(now.getMonth()+1)));tn+=Math.max(0,g.t-g.s)/ml});
+  if(S.goals.length)T.push([tn>sav?"bad":"ok",tn>sav?"I tuoi obiettivi chiedono troppo":"Gli obiettivi ci stanno","Per rispettare le scadenze servono "+E(tn)+" al mese, "+(tn>sav?"più dei "+E(sav)+" che risparmi: allunga una scadenza o riduci un importo.":"entro i "+E(sav)+" che risparmi.")]);
+  $("tips").innerHTML=T.map(function(x){return'<div class="tip '+x[0]+'"><b>'+x[1]+'</b><span>'+x[2]+'</span></div>'}).join("");
+  // spese
+  var cs=Object.keys(cat).sort(function(a,b){return cat[b]-cat[a]});
+  $("xcat").innerHTML=cs.length?cs.map(function(k){return'<div><div class="row" style="border:0;padding:0"><span>'+CAT[k][0]+'</span><b>'+E(cat[k])+'</b></div><div class="bar"><i style="width:'+cat[k]/sp*100+'%"></i></div></div>'}).join(""):"<span style='color:var(--mute)'>Nessuna spesa registrata questo mese.</span>";
+  $("xlist").innerHTML=me.length?me.slice().reverse().slice(0,15).map(function(o){return'<div class="row"><span>'+CAT[o.x.c][0]+(o.x.n?" · "+o.x.n:"")+'<small>'+o.x.d.split("-").reverse().join("/")+'</small></span><span><b>'+E(o.x.a)+'</b><button class="x" data-del="'+o.i+'" aria-label="Elimina">✕</button></span></div>'}).join(""):"<span style='color:var(--mute)'>Aggiungi la prima spesa qui sopra.</span>";
+  // obiettivi
+  var G='<div><div class="row" style="border:0;padding:0"><b>Fondo di emergenza</b><span>'+E(Math.min(S.have,target))+' / '+E(target)+'</span></div><div class="bar g"><i style="width:'+(target>0?Math.min(S.have/target,1)*100:0)+'%"></i></div><small style="color:var(--mute)">'+(gap===0?"Completo":"Con "+E(sav)+" al mese: "+(m0===Infinity?"imposta il risparmio":m0+" mesi"))+'</small></div>';
+  S.goals.forEach(function(g,i){var ml=Math.max(1,(+g.d.slice(0,4)-now.getFullYear())*12+(+g.d.slice(5)-(now.getMonth()+1))),need=Math.max(0,g.t-g.s)/ml;
+    G+='<div style="border-top:1px solid var(--line);margin-top:14px;padding-top:12px"><div class="row" style="border:0;padding:0"><b>'+g.n.replace(/</g,"&lt;")+'</b><span>'+E(g.s)+' / '+E(g.t)+'</span></div><div class="bar g"><i style="width:'+Math.min(g.s/g.t,1)*100+'%"></i></div><small style="color:var(--mute)">'+(g.s>=g.t?"Raggiunto":"Servono "+E(need)+" al mese per i "+ml+" mesi rimasti")+'</small><div class="grid" style="margin-top:8px;grid-template-columns:1fr auto auto"><input type="number" inputmode="decimal" placeholder="Importo €" aria-label="Importo da aggiungere"><button class="x" data-a="add" data-i="'+i+'">Aggiungi</button><button class="x" data-a="del" data-i="'+i+'" aria-label="Elimina">✕</button></div></div>'});
+  $("goals").innerHTML=G;
+  // investimenti
+  var yrs=Math.max(1,Math.min(40,Math.round(S.yrs))),n=yrs*12,h=yrs<3?0:yrs<5?1:yrs<10?2:3,a=S.age>=55?0:S.age>=40?1:2,sc=h+(+S.rx)+a;
+  var eq=yrs<3?0:sc<=2?20:sc<=4?40:sc<=6?60:80,az=eq/100,nm={0:"Solo liquidità",20:"Molto prudente",40:"Prudente",60:"Bilanciato",80:"Dinamico"};
+  $("prof").textContent=nm[eq];
+  $("abar").innerHTML=eq===0?'<i style="width:100%;background:var(--c1)"></i>':'<i style="width:'+eq+'%;background:var(--c2)"></i><i style="width:'+(100-eq)+'%;background:var(--gold)"></i>';
+  $("aleg").innerHTML=eq===0?'<span><b style="background:var(--c1)"></b>Liquidità 100%</span>':'<span><b style="background:var(--c2)"></b>Azionario globale '+eq+'%</span><span><b style="background:var(--gold)"></b>Obbligazionario '+(100-eq)+'%</span>';
+  $("atxt").textContent=(m0>0?"Dopo il fondo, di ":"Dei tuoi ")+E(sav)+" al mese: "+E(sav*az)+" in azioni e "+E(sav*(1-az))+" in obbligazioni."+(lump>0?" I "+E(lump)+" oltre il fondo puoi investirli a rate in 6–12 mesi.":"");
+  var I=[];
+  if(eq>0){I.push(["Azionario globale","Un solo ETF su un indice mondiale basta per iniziare. Esempio: Vanguard FTSE All-World UCITS ETF Acc (IE00BK5BQT80), con i mercati emergenti. Alternativa: iShares Core MSCI World (IE00B4L5Y983), solo mercati sviluppati."]);
+    if(eq<100)I.push(["Obbligazionario","Frena i cali. Cerca un ETF obbligazionario globale diversificato, per esempio sul Global Aggregate. Per il breve vanno bene conto deposito o monetari."])}
+  else I.push(["Liquidità","Conto deposito, BOT o ETF monetari: poco rendimento ma capitale stabile."]);
+  I.push(["Prima di comprare","Leggi il KID e confronta TER, replica fisica, UCITS e accumulazione. I prodotti cambiano: verifica su justETF e sul sito del broker."]);
+  I.push(["Il rischio","Un ETF azionario può perdere il 30–40% in una crisi e servire anni per recuperare. Il PAC aiuta, ma non elimina le perdite."]);
+  $("ideas").innerHTML=I.map(function(x){return'<div class="tip"><b>'+x[0]+'</b><span>'+x[1]+'</span></div>'}).join("");
+  var SC=[["Prudente",2,1,"--c1"],["Medio",5,2.5,"--c2"],["Ottimista",8,3.5,"--c3"]],res=[],mx=1;
+  SC.forEach(function(s){var r=(az*s[1]+(1-az)*s[2]-0.4)/100/12,b=lump,pts=[b],ver=[b];
+    for(var t=1;t<=n;t++){if(t>m0)b=b*(1+r)+sav;if(t%12===0){pts.push(b);ver.push(lump+sav*Math.max(0,t-m0))}}
+    var fin=pts[pts.length-1],v=ver[ver.length-1];res.push({s:s,pts:pts,ver:ver,net:fin-Math.max(0,fin-v)*.26,v:v});mx=Math.max(mx,fin)});
+  var X=function(i,L){return 8+i/(L-1||1)*304},Y=function(v){return 140-v/mx*125};
+  var pa=function(a){return a.map(function(v,i){return(i?"L":"M")+X(i,a.length).toFixed(1)+" "+Y(v).toFixed(1)}).join(" ")};
+  var svg='<line x1="8" x2="312" y1="140" y2="140" stroke="var(--line)"/><path d="'+pa(res[0].ver)+'" fill="none" stroke="var(--mute)" stroke-width="1.5" stroke-dasharray="4 4"/>';
+  res.forEach(function(x){svg+='<path d="'+pa(x.pts)+'" fill="none" stroke="var('+x.s[3]+')" stroke-width="2.5"/>'});
+  $("chart").innerHTML=svg;
+  $("scleg").innerHTML=res.map(function(x){return'<span><b style="background:var('+x.s[3]+')"></b>'+x.s[0]+'</span>'}).join("")+"<span>Tratteggio: versato</span>";
+  $("scen").innerHTML=res.map(function(x){return'<div class="row"><span>'+x.s[0]+'<small>'+x.s[1]+'% azioni, '+x.s[2]+'% obbl.</small></span><b>'+E(x.net)+'</b></div>'}).join("")+'<p class="note">Dopo '+yrs+' anni, al netto di costi (0,4% annuo) e del 26% sul guadagno. Versato: circa '+E(res[0].v)+'. Ipotesi, non previsioni.</p>';
+}
+draw();
+</script>
+</body>
+</html>
